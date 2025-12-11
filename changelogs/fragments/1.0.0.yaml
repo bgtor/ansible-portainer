@@ -1,0 +1,5 @@
+---
+release_summary: >-
+  This collection contains a set of Ansible modules that allow management
+  of Portainer environments and stacks. It is focused solely
+  on Docker based environments. Currently Kubernetes environments are not supported.

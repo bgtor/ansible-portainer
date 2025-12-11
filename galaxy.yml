@@ -1,0 +1,55 @@
+---
+# This collection is initialized by https://github.com/ansible/ansible-creator 25.11.0
+
+# See https://docs.ansible.com/ansible/latest/dev_guide/collections_galaxy_meta.html
+
+namespace: "bgtor"
+name: "portainer"
+version: 1.0.0
+readme: README.md
+authors:
+  - Igor Moraru (@bgtor)
+
+description: A collection that provides a set of modules to interact with Portainer API.
+license_file: LICENSE
+
+# TO-DO: update the tags based on your content type
+tags: ["portainer"]
+# TO-DO: maintain this list to reflect the collection's dependencies
+dependencies: {}
+  # "ansible.utils": "*" # note: "*" selects the latest version available
+
+repository: https://github.com/bgtor/ansible-portainer
+documentation: https://github.com/bgtor/ansible-portainer
+homepage: https://github.com/bgtor/ansible-portainer
+issues: https://github.com/bgtor/ansible-portainer/issues
+
+# A list of file glob-like patterns used to filter any files or directories that should not be included in the build
+# artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This
+# uses 'fnmatch' to match the files or directories. Some directories and files like 'galaxy.yml', '*.pyc', '*.retry',
+# and '.git' are always filtered. Mutually exclusive with 'manifest'
+build_ignore:
+  - changelogs/.plugin-cache.yaml
+  - .git
+  - .github
+  - .gitignore
+  - .vscode
+  - .devcontainer
+  - .pre-commit-config.yaml
+  - .prettierignore
+  - .isort.cfg
+  - .ansible
+  - tests
+  - test-requirements.txt
+  - tox-ansible.ini
+  - extensions/molecule
+  - '*.pyc'
+  - '*.tar.gz'
+  - __pycache__
+  - .pytest_cache
+# A dict controlling use of manifest directives used in building the collection artifact. The key 'directives' is a
+# list of MANIFEST.in style
+# L(directives,https://packaging.python.org/en/latest/guides/using-manifest-in/#manifest-in-commands). The key
+# 'omit_default_directives' is a boolean that controls whether the default directives are used. Mutually exclusive
+# with 'build_ignore'
+# manifest: null

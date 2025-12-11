@@ -1,0 +1,35 @@
+ancestor: null
+releases:
+  1.0.0:
+    changes:
+      release_summary: This collection contains a set of Ansible modules that allow
+        management of Portainer environments and stacks. It is focused solely on Docker
+        based environments. Currently Kubernetes environments are not supported.
+    fragments:
+    - 1.0.0.yaml
+    modules:
+    - description: Manage Portainer environment configs
+      name: portainer_config
+      namespace: ''
+    - description: Manage Portainer environments
+      name: portainer_environment
+      namespace: ''
+    - description: Gets Portainer environment info
+      name: portainer_environment_info
+      namespace: ''
+    - description: Manage Portainer environment groups
+      name: portainer_group
+      namespace: ''
+    - description: Manage Portainer environment networks
+      name: portainer_network
+      namespace: ''
+    - description: Manage Portainer environment secrets
+      name: portainer_secret
+      namespace: ''
+    - description: Manage Portainer environment stacks
+      name: portainer_stack
+      namespace: ''
+    - description: Manage Portainer tags
+      name: portainer_tag
+      namespace: ''
+    release_date: '2025-12-11'

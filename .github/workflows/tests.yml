@@ -1,0 +1,105 @@
+---
+name: "CI"
+
+on:
+  # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
+  push:
+    paths-ignore:
+      - 'docs/**'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+  workflow_dispatch:
+env:
+  NAMESPACE: bgtor
+  COLLECTION_NAME: portainer
+  ANSIBLE_FORCE_COLOR: true
+  ANSIBLE_COLLECTIONS_PATH: ${{ github.workspace }}
+
+jobs:
+
+  sanity:
+    name: Sanity tests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Initialize env vars
+        uses: briantist/ezenv@v1
+        with:
+          env: |
+            COLLECTION_PATH=ansible_collections/${NAMESPACE}/${COLLECTION_NAME}
+
+      - name: Check out code
+        uses: actions/checkout@v5
+        with:
+          show-progress: false
+          path: ${{ env.COLLECTION_PATH }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install ansible-core
+        run: pip install ansible-core
+
+      - name: Run sanity tests
+        run: ansible-test sanity --docker default -v --color --coverage
+        working-directory: ${{ env.COLLECTION_PATH }}
+
+      - name: Generate coverage report
+        if: ${{ github.event_name != 'schedule' }}
+        run: ansible-test coverage xml -v --requirements --group-by command --group-by environment --group-by target
+        working-directory: ${{ env.COLLECTION_PATH }}
+
+      - name: Upload ${{ github.job }} coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage=${{ github.job }}=data
+          path: ${{ env.COLLECTION_PATH }}/tests/output/reports/
+          if-no-files-found: error
+          retention-days: 1
+
+
+  units:
+    runs-on: ubuntu-latest
+    name: Units Tests
+
+    steps:
+      - name: Initialize env vars
+        uses: briantist/ezenv@v1
+        with:
+          env: |
+            COLLECTION_PATH=ansible_collections/${NAMESPACE}/${COLLECTION_NAME}
+
+      - name: Check out code
+        uses: actions/checkout@v5
+        with:
+          show-progress: false
+          path: ${{ env.COLLECTION_PATH }}
+
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install ansible-core
+        run: pip install ansible-core
+
+      - name: Run unit test
+        run: ansible-test units --docker default --color --coverage
+        working-directory: ${{ env.COLLECTION_PATH }}
+
+      - name: Generate coverage report
+        run: ansible-test coverage xml -v --requirements --group-by command --group-by environment --group-by target
+        working-directory: ${{ env.COLLECTION_PATH }}
+
+      - name: Upload ${{ github.job }} coverage reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage=${{ github.job }}=data
+          path: ${{ env.COLLECTION_PATH }}/tests/output/reports/
+          if-no-files-found: error
+          retention-days: 1
