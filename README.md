@@ -47,13 +47,17 @@ ansible-galaxy collection install bgtor.portainer:==X.Y.Z
 ```
 
 See
+[Documentation](https://galaxy.ansible.com/ui/repo/published/bgtor/portainer/docs/)
+for bgtor.portainer modules.
+
+See
 [Ansible Using Collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html)
 for more details.
 
 ## Release notes
 
 See the
-[changelog](https://github.com/ansible-collections/bgtor.portainer/tree/main/CHANGELOG.rst).
+[changelog](https://github.com/bgtor/ansible-portainer/tree/main/CHANGELOG.rst).
 
 ## Roadmap
 
