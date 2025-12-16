@@ -4,6 +4,14 @@ bgtor.portainer Release Notes
 
 .. contents:: Topics
 
+v1.0.1
+======
+
+Bugfixes
+--------
+
+- Fixed the GroupId field when creating new environments.
+
 v1.0.0
 ======
 

@@ -26,6 +26,7 @@ class PortainerFields:
     ENDPOINT_NAME = "Name"
     ENDPOINT_HEARTBEAT = "Heartbeat"
     ENDPOINT_GROUP_ID = "GroupId"  # Inconsistent with TagIDs!
+    ENDPOINT_GROUP_ID_FORM_DATA = "GroupID"
     ENDPOINT_GROUP_IDS = "GroupIds"  # Inconsistent with TagIDs!
     ENDPOINT_TAG_IDS = "TagIds"  # DIFFERENT from GROUP_TAG_IDS!
     ENDPOINT_GROUP_IDS_QUERY = "groupIds"  # Inconsistent with TagIDs!

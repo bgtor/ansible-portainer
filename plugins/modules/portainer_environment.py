@@ -270,8 +270,13 @@ class PortainerEnvironmentManager:
 
     def create_environment(self) -> None:
 
+        data = self._get_environment_data()
+        data[PF.ENDPOINT_GROUP_ID_FORM_DATA] = data.pop(PF.ENDPOINT_GROUP_ID, None)
+
         self.environment = self.crud.environment.create_item(
-            name=self.name, item_data=self._get_environment_data(), body_format=BodyFormat.FORM_DATA
+            name=self.name,
+            item_data=data,
+            body_format=BodyFormat.FORM_DATA,
         )
 
     def update_environment(self) -> None:

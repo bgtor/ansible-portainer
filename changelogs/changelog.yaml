@@ -33,3 +33,10 @@ releases:
       name: portainer_tag
       namespace: ''
     release_date: '2025-12-11'
+  1.0.1:
+    changes:
+      bugfixes:
+      - Fixed the GroupId field when creating new environments.
+    fragments:
+    - 1.0.1.yaml
+    release_date: '2025-12-16'

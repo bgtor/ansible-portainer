@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed the GroupId field when creating new environments. 
