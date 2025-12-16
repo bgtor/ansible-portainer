@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed handling of None data when building diffs. Added unit tests.  

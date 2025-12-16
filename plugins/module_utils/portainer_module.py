@@ -33,12 +33,17 @@ class IdempotencyManager:
 
         return {k: v for k, v in changes.items() if v is not None}
 
-    def build_diff(self, before_data, after_data, skip_fields: list | None = None):
+    def build_diff(
+        self,
+        before_data: dict | None = None,
+        after_data: dict | None = None,
+        skip_fields: list | None = None,
+    ):
         """Generate unified diff format."""
         before = self._sanitize_for_diff(before_data, skip_fields=skip_fields)
 
-        _after_data = copy.deepcopy(before_data)
-        _after_data.update(after_data)
+        _after_data = copy.deepcopy(before_data or {})
+        _after_data.update(after_data or {})
 
         after = self._sanitize_for_diff(_after_data, skip_fields=skip_fields)
 
@@ -47,7 +52,9 @@ class IdempotencyManager:
             "after": after,
         }
 
-    def _sanitize_for_diff(self, data: dict, skip_fields: list[str] | None = None) -> dict:
+    def _sanitize_for_diff(
+        self, data: dict | None = None, skip_fields: list[str] | None = None
+    ) -> dict:
 
         if not data:
             return {}

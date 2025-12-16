@@ -114,7 +114,7 @@ class PortainerConfigManager:
         self.old_config = {}
 
     def __call__(self) -> None:
-        self.config = self.get_config()
+        self.config = self.get_config() or {}
         self.old_config = copy.deepcopy(self.config)
 
         states_mapping = {

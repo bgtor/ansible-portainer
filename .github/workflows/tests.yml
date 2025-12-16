@@ -6,6 +6,8 @@ on:
   push:
     paths-ignore:
       - 'docs/**'
+    tags-ignore:
+      - '**'
   pull_request:
     branches: [main]
     paths-ignore:

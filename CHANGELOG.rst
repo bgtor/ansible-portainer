@@ -4,6 +4,14 @@ bgtor.portainer Release Notes
 
 .. contents:: Topics
 
+v1.0.2
+======
+
+Bugfixes
+--------
+
+- Fixed handling of None data when building diffs. Added unit tests.
+
 v1.0.1
 ======
 

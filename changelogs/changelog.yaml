@@ -40,3 +40,10 @@ releases:
     fragments:
     - 1.0.1.yaml
     release_date: '2025-12-16'
+  1.0.2:
+    changes:
+      bugfixes:
+      - Fixed handling of None data when building diffs. Added unit tests.
+    fragments:
+    - 1.0.2.yaml
+    release_date: '2025-12-16'
