@@ -4,12 +4,13 @@ name: "CI"
 on:
   # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
   push:
+    branches:
+      - main
     paths-ignore:
       - 'docs/**'
-    tags-ignore:
-      - '**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
     paths-ignore:
       - 'docs/**'
   workflow_dispatch:
