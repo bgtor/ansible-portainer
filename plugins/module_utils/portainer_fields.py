@@ -13,24 +13,25 @@ class PortainerFields:
     GROUP_ID = "Id"
     GROUP_NAME = "Name"
     GROUP_DESCRIPTION = "Description"
-    GROUP_TAG_IDS = "TagIDs"  # NOT TagIds
+    GROUP_TAG_IDS = "TagIDs"
     GROUP_ASSOCIATED_ENDPOINTS = "AssociatedEndpoints"
 
     # Tags
     TAG_ID = "ID"
     TAG_NAME = "Name"
-    TAG_ENDPOINTS = "Endpoints"  # NOT EndpointIds
+    TAG_ENDPOINTS = "Endpoints"
 
     # Endpoints
     ENDPOINT_ID = "Id"
     ENDPOINT_NAME = "Name"
+    ENDPOINT_NAME_QUERY = "name"
     ENDPOINT_HEARTBEAT = "Heartbeat"
-    ENDPOINT_GROUP_ID = "GroupId"  # Inconsistent with TagIDs!
+    ENDPOINT_GROUP_ID = "GroupId"
     ENDPOINT_GROUP_ID_FORM_DATA = "GroupID"
-    ENDPOINT_GROUP_IDS = "GroupIds"  # Inconsistent with TagIDs!
-    ENDPOINT_TAG_IDS = "TagIds"  # DIFFERENT from GROUP_TAG_IDS!
-    ENDPOINT_GROUP_IDS_QUERY = "groupIds"  # Inconsistent with TagIDs!
-    ENDPOINT_TAG_IDS_QUERY = "tagIds"  # DIFFERENT from GROUP_TAG_IDS!
+    ENDPOINT_GROUP_IDS = "GroupIds"
+    ENDPOINT_TAG_IDS = "TagIds"
+    ENDPOINT_GROUP_IDS_QUERY = "groupIds"
+    ENDPOINT_TAG_IDS_QUERY = "tagIds"
     ENDPOINT_CREATION_TYPE = "EndpointCreationType"
     ENDPOINT_URL = "URL"
     ENDPOINT_EDGE_CHECKIN_INTERVAL = "EdgeCheckinInterval"

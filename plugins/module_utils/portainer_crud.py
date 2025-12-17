@@ -404,7 +404,7 @@ class EnvironmentCRUD(BaseCRUD):
             params.update([(f"{PF.ENDPOINT_TAG_IDS_QUERY}[]", tid) for tid in tag_ids])
 
         if name:
-            params.update([(PF.ENDPOINT_NAME, name)])
+            params.update([(PF.ENDPOINT_NAME_QUERY, name)])
 
         return self.list_items(params=params)
 
