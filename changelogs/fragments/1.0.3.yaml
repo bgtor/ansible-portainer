@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - Fixed environment 'name' field for query params.
+  - Fixed handling of stack environment data.

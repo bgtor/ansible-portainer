@@ -4,6 +4,15 @@ bgtor.portainer Release Notes
 
 .. contents:: Topics
 
+v1.0.3
+======
+
+Bugfixes
+--------
+
+- Fixed environment 'name' field for query params.
+- Fixed handling of stack environment data.
+
 v1.0.2
 ======
 
