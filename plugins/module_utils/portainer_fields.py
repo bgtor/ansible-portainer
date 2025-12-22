@@ -56,6 +56,7 @@ class PortainerFields:
     STACK_AUTOUPDATE = "AutoUpdate"
     STACK_COMPOSE_FILE = "ComposeFile"
     STACK_ENV = "Env"
+    STACK_ENV_FORM_DATA = "env"
     STACK_PRUNE = "Prune"
     STACK_PULL_IMAGES = "PullImage"
     STACK_FROM_APP_TEMPLATE = "FromAppTemplate"

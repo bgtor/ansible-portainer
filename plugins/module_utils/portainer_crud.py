@@ -349,8 +349,14 @@ class EnvironmentCRUD(BaseCRUD):
         if not isinstance(item, dict):
             return item
 
-        if item.get(PF.ENDPOINT_TYPE) == 4 and item.get(PF.ENDPOINT_HEARTBEAT, False):
-            item[PF.ENDPOINT_SWARM] = self.get_swarm_info(endpoint_id=item[PF.ENDPOINT_ID])
+        # Get Swarm info for Local and Edge Docker environments
+        if item.get(PF.ENDPOINT_TYPE) == 1 or (
+            item.get(PF.ENDPOINT_TYPE) == 4 and item.get(PF.ENDPOINT_HEARTBEAT, False)
+        ):
+            try:
+                item[PF.ENDPOINT_SWARM] = self.get_swarm_info(endpoint_id=item[PF.ENDPOINT_ID])
+            except KeyError:
+                pass
 
         if PF.ENDPOINT_TLS_CONFIG not in item:
             return item

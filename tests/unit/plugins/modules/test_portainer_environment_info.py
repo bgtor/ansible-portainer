@@ -48,7 +48,7 @@ def test_get_environment_info_success(
 
     assert len(calls) == 2
     assert calls[1].params
-    assert calls[1].params["Name"] == "test-environment"
+    assert calls[1].params[PF.ENDPOINT_NAME_QUERY] == "test-environment"
 
     assert result["changed"] is False
     assert result["results"][0][PF.ENDPOINT_ID] == 1
@@ -82,7 +82,7 @@ def test_get_environment_info_empty(
 
     assert len(calls) == 2
     assert calls[1].params
-    assert calls[1].params["Name"] == "test-environment"
+    assert calls[1].params[PF.ENDPOINT_NAME_QUERY] == "test-environment"
 
     assert result["changed"] is False
     assert len(result["results"]) == 0

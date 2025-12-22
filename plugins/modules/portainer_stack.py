@@ -1103,9 +1103,15 @@ class StackRepository:
         if not self.state_manager.name:
             return
 
+        data = self.data_builder.get_create_data()
+
+        # Convert Env data to json for form-data payloads
+        if self.config.create_body_format == BodyFormat.FORM_DATA:
+            data[PF.STACK_ENV] = json.dumps(data[PF.STACK_ENV])
+
         stack_data = self.crud.create_item(
             self.state_manager.name,
-            item_data=self.data_builder.get_create_data(),
+            item_data=data,
             body_format=self.config.create_body_format,
             params=self._get_endpoint_params(),
         )
@@ -1269,6 +1275,8 @@ class StackManager:
             )
 
         state_function()
+
+        self.module.warn(f"New Stack: {self.stack}")
 
         self.results["stack"] = self.stack.to_dict()
 
