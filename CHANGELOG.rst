@@ -4,6 +4,14 @@ bgtor.portainer Release Notes
 
 .. contents:: Topics
 
+v1.0.4
+======
+
+Bugfixes
+--------
+
+- Handled swarm info errors for non-swarm environments
+
 v1.0.3
 ======
 

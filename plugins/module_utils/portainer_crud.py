@@ -416,8 +416,15 @@ class EnvironmentCRUD(BaseCRUD):
 
     @lru_cache
     def get_swarm_info(self, endpoint_id: int) -> dict[str, Any]:
-        with self.module.crud.swarm.using_endpoint(endpoint_id):
-            return self.module.crud.swarm.inspect_swarm()
+        # Handling API errors for non-swarm environments
+        try:
+            with self.module.crud.swarm.using_endpoint(endpoint_id):
+                return self.module.crud.swarm.inspect_swarm()
+        except self.module.client.exc.PortainerApiError as e:
+            if e.status == 503 and "not a swarm" in str(e.body).lower():
+                # This environment is not running in swarm mode
+                return {}
+            raise
 
 
 class StackCRUD(BaseCRUD):

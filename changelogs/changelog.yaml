@@ -55,3 +55,10 @@ releases:
     fragments:
     - 1.0.3.yaml
     release_date: '2025-12-22'
+  1.0.4:
+    changes:
+      bugfixes:
+      - Handled swarm info errors for non-swarm environments
+    fragments:
+    - 1.0.4.yaml
+    release_date: '2026-01-18'
