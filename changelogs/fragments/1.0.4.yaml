@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Handled swarm info errors for non-swarm environments
