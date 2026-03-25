@@ -8,7 +8,8 @@ from typing import Any, Callable, TypedDict, Union
 from dataclasses import dataclass, field
 
 from ansible.module_utils.common.text.converters import to_bytes
-from ansible.module_utils.common._collections_compat import MutableMapping
+from collections.abc import MutableMapping
+
 from plugins.module_utils.portainer_module import PortainerModule
 from plugins.module_utils.portainer_client import PortainerClient, RequestMethod
 

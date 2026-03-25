@@ -187,7 +187,6 @@ class BaseCRUD:
         params: dict | None = None,
         filters: dict | None = None,
     ) -> dict[str, Any] | None:
-
         try:
             return self.get_item_by_name(name=name, params=params, filters=filters)
         except MultipleItemsReturned as e:
@@ -443,17 +442,15 @@ class StackCRUD(BaseCRUD):
         return f"{self.endpoint}/create/{self.stack_type}/{self.stack_source}"
 
     def _get_update_endpoint(self, id: int) -> str:
-        if self.stack_type == "swarm":
-            if self.stack_source == "repository":
-                return f"{self.endpoint}/{id}/git"
+        if self.stack_source == "repository":
+            return f"{self.endpoint}/{id}/git"
 
         return f"{self.endpoint}/{id}"
 
     @property
     def _update_method(self) -> Callable:
-        if self.stack_type == "swarm":
-            if self.stack_source == "repository":
-                return self.module.client.post
+        if self.stack_source == "repository":
+            return self.module.client.post
 
         return self.module.client.put
 
@@ -488,6 +485,10 @@ class StackCRUD(BaseCRUD):
             item[PF.STACK_TLS_SKIP_VERIFY] = get_nested(
                 git_configs, PF.STACK_GIT_CONFIGS_TLS_SKIP_VERIFY
             )
+            item[PF.STACK_REPOSITORY_URL] = get_nested(
+                git_configs, PF.STACK_GIT_CONFIGS_REPOSITORY_URL
+            )
+            item[PF.STACK_COMPOSE_FILE] = get_nested(git_configs, PF.STACK_GIT_CONFIGS_COMPOSE_FILE)
 
         return item
 
@@ -498,11 +499,10 @@ class StackCRUD(BaseCRUD):
         params: dict | None = None,
     ) -> dict[str, Any] | None:
         response = None
-        if self.stack_type == "swarm":
-            if self.stack_source == "repository":
-                response = self.module.client.put(
-                    f"{self.endpoint}/{stack_id}/git/redeploy", data=data, params=params
-                )
+        if self.stack_source == "repository":
+            response = self.module.client.put(
+                f"{self.endpoint}/{stack_id}/git/redeploy", data=data, params=params
+            )
 
         if not isinstance(response, dict):
             raise ValueError("Unexpected response received")

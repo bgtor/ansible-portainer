@@ -108,7 +108,7 @@ def test_update_password_for_repository_forces_update(
     result = json.loads(out)
 
     assert result["changed"] is True
-    assert "Stack updated" in result.get("msg", "") or "Stack updated." in result.get("msg", "")
+    assert "Stack updated" in result.get("msg", "")
     assert result["stack"][PF.STACK_ID] == 5
 
 

@@ -78,6 +78,8 @@ class PortainerFields:
     STACK_GIT_CONFIGS_USERNAME = "Authentication.Username"
     STACK_GIT_CONFIGS_REFS_NAME = "ReferenceName"
     STACK_GIT_CONFIGS_TLS_SKIP_VERIFY = "TLSSkipVerify"
+    STACK_GIT_CONFIGS_REPOSITORY_URL = "URL"
+    STACK_GIT_CONFIGS_COMPOSE_FILE = "ConfigFilePath"
 
     # Configs
     CONFIG_ID = "ID"

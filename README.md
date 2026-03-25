@@ -227,7 +227,7 @@ ansible-test units tests/unit/plugins/modules/test_portainer_config.py
 Validate module syntax and imports:
 
 ```bash
-ansible-test sanity
+ansible-test sanity --docker default # Needs docker installed
 ```
 
 ## Contributing
@@ -237,7 +237,7 @@ Contributions are welcome! Please:
 1. Fork the repository
 2. Create a feature branch
 3. Add tests for new functionality
-4. Ensure all tests pass: `ansible-test units`
+4. Ensure all tests pass: `ansible-test units --docker default` (Needs docker installed)
 5. Submit a pull request
 
 ## Support

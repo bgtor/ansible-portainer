@@ -563,6 +563,7 @@ class Stack:
     endpoint_id: int | None = None
     tls_skip_verify: bool | None = None
     status: int | None = None
+    file_content: str | None = None
 
     # Note: Both PF.STACK_SWARM_ID and PF.STACK_SWARM_ID_FORM_DATA map to "swarm_id",
     # and both PF.STACK_ENDPOINT_ID and PF.STACK_ENDPOINT_ID_QUERY map to "endpoint_id".
@@ -589,6 +590,7 @@ class Stack:
         PF.STACK_ENDPOINT_ID_QUERY: "endpoint_id",
         PF.STACK_TLS_SKIP_VERIFY: "tls_skip_verify",
         PF.STACK_STATUS: "status",
+        PF.STACK_FILE_CONTENT: "file_content",
     }
 
     private_fields: ClassVar[list[str]] = [PF.STACK_REPOSITORY_PASSWORD]
@@ -601,7 +603,7 @@ class Stack:
     def to_dict(self) -> dict:
         data = {}
         for k, v in self.fields_mapping.items():
-            value = getattr(self, v)
+            value = getattr(self, v, None)
             if value is None:
                 continue
             if k in self.private_fields:
@@ -1077,26 +1079,35 @@ class StackRepository:
         self.config = config
 
     def get_stack(self) -> dict | None:
+        stack_data = None
+
         if self.state_manager.stack_id:
-            return self.crud.get_item_by_id(self.state_manager.stack_id)
+            stack_data = self.crud.get_item_by_id(self.state_manager.stack_id)
 
-        if not self.state_manager.name:
-            return
+        if self.state_manager.name:
 
-        params = {}
-        if self.state_manager.swarm_id:
-            params["filters"] = json.dumps({PF.STACK_SWARM_ID: self.state_manager.swarm_id})
+            params = {}
 
-        local_filters = {}
-        if self.state_manager.endpoint_id:
-            local_filters[PF.STACK_ENDPOINT_ID] = self.state_manager.endpoint_id
+            if self.state_manager.swarm_id:
+                params["filters"] = json.dumps({PF.STACK_SWARM_ID: self.state_manager.swarm_id})
 
-        return self.crud.validate_single_item(
-            name=self.state_manager.name,
-            operation="retrieve",
-            params=params,
-            filters=local_filters,
-        )
+            local_filters = {}
+            if self.state_manager.endpoint_id:
+                local_filters[PF.STACK_ENDPOINT_ID] = self.state_manager.endpoint_id
+
+            stack_data = self.crud.validate_single_item(
+                name=self.state_manager.name,
+                operation="retrieve",
+                params=params,
+                filters=local_filters,
+            )
+
+        if stack_data and self.state_manager.stack_source == "file":
+            stack_id = self.state_manager.stack_id or stack_data.get(PF.STACK_ID)
+            if stack_id:
+                stack_data[PF.STACK_FILE_CONTENT] = self.crud.get_stack_file_content(stack_id)
+
+        return stack_data
 
     def create_stack(self) -> None:
 
@@ -1107,7 +1118,9 @@ class StackRepository:
 
         # Convert Env data to json for form-data payloads
         if self.config.create_body_format == BodyFormat.FORM_DATA:
-            data[PF.STACK_ENV] = json.dumps(data[PF.STACK_ENV])
+            env_data = data.get(PF.STACK_ENV, None)
+            if env_data:
+                data[PF.STACK_ENV] = json.dumps(env_data)
 
         stack_data = self.crud.create_item(
             self.state_manager.name,
@@ -1276,8 +1289,6 @@ class StackManager:
 
         state_function()
 
-        self.module.warn(f"New Stack: {self.stack}")
-
         self.results["stack"] = self.stack.to_dict()
 
         if not self.results["stack"]:
@@ -1296,15 +1307,22 @@ class StackManager:
             )
 
     def ensure_present(self) -> None:
+
         if self.stack.id:
             changed, changes = self.needs_update()
 
-            if not changed:
+            should_recreate = self.needs_recreate()
+
+            if not changed and not should_recreate:
                 self.results["msg"] = "Stack already exists with correct configuration."
                 return
 
             if not self.check_mode:
-                self.repository.update_stack()
+                if should_recreate:
+                    self.repository.delete_stack()
+                    self.repository.create_stack()
+                else:
+                    self.repository.update_stack()
             else:
                 self.state_manager.update_state(changes)
 
@@ -1396,6 +1414,31 @@ class StackManager:
 
         return bool(changes), changes
 
+    def needs_recreate(self, old_data: dict | None = None, new_data: dict | None = None) -> bool:
+        is_repository = self.state_manager.stack_source == "repository"
+
+        if not is_repository:
+            return False
+
+        old_data = old_data or self.old_stack.to_dict()
+        new_data = new_data or self.data_builder.get_create_data()
+
+        recreate_fields = [
+            PF.STACK_REPOSITORY_URL,
+            PF.STACK_COMPOSE_FILE,
+            PF.STACK_ADDITIONAL_FILES,
+        ]
+
+        recreate_old_data = {k: v for k, v in old_data.items() if k in recreate_fields}
+        recreate_new_data = {k: v for k, v in new_data.items() if k in recreate_fields}
+
+        changes = self.idempotency.needs_update(
+            existing_data=recreate_old_data,
+            new_data=recreate_new_data,
+        )
+
+        return bool(changes)
+
 
 def main():
 
@@ -1452,7 +1495,7 @@ def main():
     module.run_checks()
 
     try:
-        results = dict(changed=False)
+        results = dict(changed=False, stack=None)
 
         stack_type = module.params["stack_type"]
         stack_source = module.params["stack_source"]
