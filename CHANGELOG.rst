@@ -4,6 +4,14 @@ bgtor.portainer Release Notes
 
 .. contents:: Topics
 
+v1.0.5
+======
+
+Bugfixes
+--------
+
+- Fixes an issue where standalone-repository stack updates were hitting the wrong endpoint (https://github.com/bgtor/ansible-portainer/issues/1)
+
 v1.0.4
 ======
 
